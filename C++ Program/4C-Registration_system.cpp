@@ -1,37 +1,34 @@
 #include <iostream>
-#include <map>
 #include <string>
-#include <fstream>
-#include <sstream>
+#include <unordered_map>
+ 
 using namespace std;
-
-int n;
-map<string, int> m;
-
-int main()
-{
-//	fstream cin("a.txt");
-	string s;
-	cin>>n;
-	while(n--)
-	{
-		cin>>s;
-		if(m.find(s) != m.end())
-		{
-			m[s]++;
-			int tmp = m[s];
-			stringstream ss;
-			string num;
-			ss << tmp;
-			ss >> num;
-			s += num;
-			m.insert(make_pair<string, int>(s, 0));
-			cout<<s<<endl;
-		}
-		else
-		{
-			m.insert(make_pair<string, int>(s, 0));
-			cout<<"OK"<<endl;
-		}
-	}
+ 
+int main() {
+    int n;
+    cin >> n;
+    
+    unordered_map<string, int> userCounts;
+ 
+    for (int i = 0; i < n; i++) {
+        string username;
+        cin >> username;
+ 
+        if (userCounts.find(username) == userCounts.end()) {
+            // User does not exist, register and print OK
+            userCounts[username] = 1;
+            cout << "OK" << endl;
+        } else {
+            // User exists, find the next available username
+            while (userCounts.find(username + to_string(userCounts[username])) != userCounts.end()) {
+                userCounts[username]++;
+            }
+ 
+            string newUsername = username + to_string(userCounts[username]);
+            userCounts[username]++;
+            cout << newUsername << endl;
+        }
+    }
+ 
+    return 0;
 }
